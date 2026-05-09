@@ -1,0 +1,14 @@
+apiVersion: v1 
+kind: Service
+metadata: 
+  name: shipping 
+  namespace: {{ .Values.namespace }} 
+
+spec:
+  selector: 
+    app.kubernetes.io/component: shipping
+  
+  ports:
+    - name: http
+      port: {{ .Values.shipping.service.port }}
+      targetPort: {{ .Values.shipping.service.port }}

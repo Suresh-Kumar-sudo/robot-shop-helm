@@ -1,0 +1,467 @@
+namespace: robot-shop
+
+ingressAlb:
+  enabled: false
+
+  className: alb
+
+  scheme: internet-facing
+
+ingressLocal:
+  enabled: true
+
+  className: nginx
+
+  host: robot-shop.local
+
+global:
+  storageClass: standard
+
+resourceQuota:
+  enabled: true
+
+  requestsCpu: "3200m"
+  limitsCpu: "7000m"
+
+  requestsMemory: "5000Mi"
+  limitsMemory: "8000Mi"
+
+  pods: "40"
+  services: "20"
+  secrets: "20"
+  configmaps: "20"
+  persistentVolumeClaims: "5"
+
+  requestsStorage: "20Gi"
+
+limitRange:
+  enabled: true 
+
+  container: 
+
+    defaults:
+      cpu: "200m"
+      memory: "128Mi"
+
+    defaultRequest:
+      cpu: "100m"
+      memory: "64Mi"
+
+    max: 
+      cpu: "1000m"
+      memory: "1500Mi"
+
+    min:
+      cpu: "100m"
+      memory: "32Mi"
+
+  pvc: 
+
+      maxStorage: "10Gi"
+      minStorage: "100Mi"
+
+serviceAccount:
+  create: true
+
+  name: robot-shop
+
+  imagePullSecret: registry-credentials
+
+mongodb:
+  replicaCount: 2 
+
+  image: 
+    repository: sureshkumarnadar1/rs-mongodb
+    tag: 1.0
+    pullPolicy: IfNotPresent
+
+  storage: 
+    className: gp3
+    size: 5Gi
+
+  resources:
+    requests: 
+      cpu: "250m"
+      memory: "512Mi"
+
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+  
+  service:
+    port: 27017
+
+  pdb:
+    enabled: true
+    minAvailable: 1 
+
+mysql:
+  replicaCount: 1 
+
+  image: 
+    repository: sureshkumarnadar1/rs-mysql-db
+    tag: 1.0
+    pullPolicy: IfNotPresent
+
+  storage: 
+    className: gp3
+    size: 5Gi
+
+  resources:
+    requests: 
+      cpu: "250m"
+      memory: "512Mi"
+
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+  
+  service:
+    port: 3306
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1 
+
+redis:
+  replicaCount: 1 
+
+  image: 
+    repository: redis
+    tag: "4.0.6"
+    pullPolicy: IfNotPresent
+
+  storage: 
+    className: gp3
+    size: 5Gi
+
+  resources:
+    requests: 
+      cpu: "200m"
+      memory: "128Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+  
+  service:
+    port: 6379
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1 
+  
+rabbitmq:
+  replicaCount: 1
+
+  image:
+    repository: rabbitmq
+    tag: "3.12-management"
+    pullPolicy: IfNotPresent
+
+  storage:
+    className: gp3
+    size: 2Gi
+
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "512Mi"
+
+    limits:
+      cpu: "500m"
+      memory: "1Gi"
+  
+  service:
+    amqpPort: 5672
+    managementPort: 15672
+  
+  clientService:
+    type: ClusterIP
+    port: 5672
+  
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+  
+  auth:
+    secretName: rabbitmq-credentials
+    username: guest
+    password: guest
+  
+  erlangCookie:
+    secretName: rabbitmq-erlang-cookie
+    cookie: secretrabbitmqcookiesuresh
+  
+cart: 
+  replicaCount: 1
+
+  image:  
+    repository: sureshkumarnadar1/rs-cart
+    tag: "1.0"
+    pullpolicy: IfNotPresent 
+
+  service:
+    port: 8080
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "50Mi"
+    
+    limits:
+      cpu: "200m"
+      memory: "100Mi"
+
+  hpa:
+    enabled: true 
+    minReplicas: 1
+    maxReplicas: 5 
+    cpu: 70 
+  
+  pdb:
+    enabled: true
+    maxUnavailable: 1 
+
+catalogue:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-catalogue
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 8080
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "50Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "100Mi"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    cpu: 70
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+
+payment:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-payment
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 8080
+
+  serviceAccount:
+    create: true
+    name: robot-shop-payment
+    imagePullSecret: registry-credentials
+
+  rabbitmq:
+    host: rabbitmq
+    credentialsSecretName: rabbitmq-credentials
+
+  gateway:
+    secretName: payment-gateway-credentials
+    apiKey: "https://paypal.com/"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "64Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 2
+    cpu: 70
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+  
+shipping:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-shipping
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 8080
+
+  env:
+    cartEndpoint: cart:8080
+    dbHost: mysql
+    javaOpts: "-Xmn256m -Xmx768m"
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "500Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "1Gi"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 7
+    cpu: 70
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+
+user:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-user
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 8080
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "50Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "100Mi"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    cpu: 70
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+
+ratings:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-ratings
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    port: 80
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "50Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "100Mi"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 2
+    cpu: 70
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+
+dispatch:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-dispatch
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "100Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "100Mi"
+
+  keda:
+    enabled: true
+
+    minReplicas: 1
+    maxReplicas: 10
+
+    pollingInterval: 5
+    cooldownPeriod: 30
+
+    rabbitmq:
+      host: amqp://guest:guest@rabbitmq-client.robot-shop.svc.cluster.local:5672/
+      queueName: orders
+      queueLength: "20"
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1
+
+web:
+  replicaCount: 1
+
+  image:
+    repository: sureshkumarnadar1/rs-web
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+
+  env:
+    catalogueHost: catalogue
+    userHost: user
+    cartHost: cart
+    shippingHost: shipping
+    paymentHost: payment
+    ratingsHost: ratings
+
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "64Mi"
+
+    limits:
+      cpu: "200m"
+      memory: "128Mi"
+
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 4
+    cpu: 70
+
+  pdb:
+    enabled: true
+    maxUnavailable: 1

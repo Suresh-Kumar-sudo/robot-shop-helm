@@ -1,0 +1,16 @@
+{{- if .Values.ratings.pdb.enabled }}
+
+apiVersion: policy/v1 
+kind: PodDisruptionBudget
+metadata: 
+  name: ratings-pdb 
+  namespace: {{ .Values.namespace }}
+
+spec: 
+  maxUnavailable: {{ .Values.ratings.pdb.maxUnavailable }}
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: ratings
+
+{{- end }}

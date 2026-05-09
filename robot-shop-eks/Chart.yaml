@@ -1,0 +1,23 @@
+apiVersion: v2
+
+name: robot-shop-eks
+
+description: Helm chart for Robot Shop microservices platform on EKS
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.0.0"
+
+keywords:
+  - robot-shop
+  - microservices
+  - kubernetes
+  - eks
+  - helm
+
+maintainers:
+  - name: Suresh Kumar Nadar
+
+home: https://github.com/sureshkumarnadar

@@ -1,0 +1,39 @@
+{{- if .Values.resourceQuota.enabled }}
+
+apiVersion: v1
+kind: ResourceQuota
+metadata: 
+  name: robot-shop-quota 
+  namespace: {{ .Values.namespace }}
+  labels:
+    app.kubernetes.io/name: robot-shop
+    app.kubernetes.io/managed-by: helm
+    environment: production
+    team: platform 
+  
+spec: 
+  hard: 
+
+    # CPU
+    requests.cpu: {{ .Values.resourceQuota.requestsCpu | quote }}
+    limits.cpu:   {{ .Values.resourceQuota.limitsCpu | quote }}
+    
+    # Memory
+
+    requests.memory: {{ .Values.resourceQuota.requestsMemory | quote }}
+    limits.memory:   {{ .Values.resourceQuota.limitsMemory | quote }}
+
+    # Object Count
+
+    pods: {{ .Values.resourceQuota.pods | quote }}
+    services: {{ .Values.resourceQuota.services | quote }}
+    secrets: {{ .Values.resourceQuota.secrets | quote }}
+    configmaps: {{ .Values.resourceQuota.configmaps | quote }}
+    persistentvolumeclaims: {{ .Values.resourceQuota.persistentVolumeClaims | quote}}
+
+    # Storage
+
+    requests.storage: {{ .Values.resourceQuota.requestsStorage | quote }}
+
+
+{{- end}}

@@ -1,0 +1,15 @@
+{{- if .Values.mysql.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget 
+metadata:
+  name: mysql-pdb 
+  namespace: {{ .Values.namespace }}
+spec: 
+  maxUnavailable: {{ .Values.mysql.pdb.maxUnavailable }} 
+
+  selector:
+    matchLabels: 
+      app: mysql 
+
+{{- end }}

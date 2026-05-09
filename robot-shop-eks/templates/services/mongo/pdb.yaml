@@ -1,0 +1,16 @@
+{{- if .Values.mongodb.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: 
+  name: mongo-pdb 
+  namespace: {{ .Values.namespace }}
+
+spec: 
+  minAvailable: {{ .Values.mongodb.pdb.minAvailable }}
+
+  selector:
+    matchLabels:
+      app: mongodb 
+
+{{- end }}        

@@ -1,0 +1,27 @@
+{{- if .Values.ratings.hpa.enabled }}
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: ratings-hpa 
+  namespace: {{ .Values.namespace }}
+
+spec: 
+  scaleTargetRef: 
+    apiVersion: apps/v1 
+    kind: Deployment
+    name: ratings 
+
+  minReplicas: {{ .Values.ratings.hpa.minReplicas }}
+  maxReplicas: {{ .Values.ratings.hpa.maxReplicas }} 
+
+  metrics:
+    - type: Resource
+      resource: 
+        name: cpu 
+        target :
+          type: Utilization
+          averageUtilization: {{ .Values.ratings.hpa.cpu }} 
+
+
+{{- end }}

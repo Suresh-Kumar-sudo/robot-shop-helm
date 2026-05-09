@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql 
+  namespace:  {{ .Values.namespace }}
+
+spec: 
+  serviceName: mysql
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: mysql 
+
+  template:
+    metadata: 
+      labels:
+        app:  mysql 
+  
+    spec: 
+      terminationGracePeriodSeconds: 30 
+
+      securityContext:
+        fsGroup: 999
+
+      initContainers:
+        - name: fix-permissions
+          image: busybox
+          command: ["sh", "-c", "chown -R 999:999 /data/mysql"]
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+            - name: data
+              mountPath: /data/mysql 
+
+      containers: 
+        - name: mysql 
+          image: "{{ .Values.mysql.image.repository }}:{{ .Values.cart.image.tag}}"
+          imagePullPolicy: {{ .Values.mysql.image.pullPolicy }}
+          
+          securityContext:
+            runAsUser: 999
+            runAsGroup: 999
+            allowPrivilegeEscalation: false 
+
+          ports:
+            - containerPort: {{ .Values.cart.service.port }}
+
+          env: 
+            - name: MYSQL_ALLOW_EMPTY_PASSWORD
+              value: "yes"
+          
+          volumeMounts:
+            - name: data
+              mountPath: /data/mysql
+
+          resources:
+
+            requests:
+              memory: {{ .Values.mysql.resources.requests.memory | quote }}
+              cpu: {{ .Values.mysql.resources.requests.cpu | quote }}
+
+            limits:
+              memory: {{ .Values.mysql.resources.limits.memory | quote }}
+              cpu: {{ .Values.mysql.resources.limits.cpu | quote }}
+
+          readinessProbe: 
+            exec: 
+              command: ["mysqladmin", "ping", "-h", "localhost"]
+            initialDelaySeconds: 30
+            periodSeconds: 10 
+
+          livenessProbe:
+            exec: 
+              command: ["mysqladmin", "ping", "-h", "localhost"]
+            initialDelaySeconds: 60
+            periodSeconds: 10
+
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes:  ["ReadWriteOnce"]
+
+        storageClassName: {{ .Values.global.storageClass }}
+
+        resources:
+          requests:
+            storage: {{ .Values.mysql.storage.size}}

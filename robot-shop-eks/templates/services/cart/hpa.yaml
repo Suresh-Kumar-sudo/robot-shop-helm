@@ -1,0 +1,24 @@
+{{- if .Values.cart.hpa.enabled }}
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata: 
+  name: cart-hpa 
+  namespace: {{ .Values.namespace }}
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: cart
+  minReplicas: {{ .Values.cart.hpa.minReplicas }}
+  maxReplicas: {{ .Values.cart.hpa.maxReplicas }}
+  metrics:
+    - type: Resource 
+      resource: 
+        name: cpu 
+        target: 
+          type: Utilization
+          averageUtilization: {{ .Values.cart.hpa.cpu }}
+
+{{- end }}

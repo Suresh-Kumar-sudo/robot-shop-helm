@@ -1,0 +1,16 @@
+{{- if .Values.user.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: user-pdb
+  namespace: {{ .Values.namespace }}
+
+spec:
+  maxUnavailable: {{ .Values.user.pdb.maxUnavailable }}
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: user
+  
+{{- end }}

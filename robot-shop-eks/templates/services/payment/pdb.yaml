@@ -1,0 +1,16 @@
+{{- if .Values.payment.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: payment-pdb 
+  namespace: {{ .Values.namespace }}
+
+spec:
+  maxUnavailable: {{ .Values.payment.pdb.maxUnavailable }}
+
+  selector:
+    matchLabels: 
+      app.kubernetes.io/component: payment
+
+{{- end }}

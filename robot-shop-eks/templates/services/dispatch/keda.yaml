@@ -1,0 +1,27 @@
+{{- if .Values.dispatch.keda.enabled }}
+
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: dispatch-keda  
+  namespace: {{ .Values.namespace }}
+
+spec:
+  scaleTargetRef:
+    name: dispatch 
+    kind: Deployment
+  
+  minReplicaCount: {{ .Values.dispatch.keda.minReplicas }}
+  maxReplicaCount: {{ .Values.dispatch.keda.maxReplicas }} 
+  pollingInterval: {{ .Values.dispatch.keda.pollingInterval }} 
+  cooldownPeriod: {{ .Values.dispatch.keda.cooldownPeriod }} 
+  triggers: 
+    - type: rabbitmq 
+
+      metadata: 
+        host: {{ .Values.dispatch.keda.rabbitmq.host | quote }}
+        queueName: {{ .Values.dispatch.keda.rabbitmq.queueName | quote }}
+        queueLength: {{ .Values.dispatch.keda.rabbitmq.queueLength | quote }}
+
+
+{{- end }}

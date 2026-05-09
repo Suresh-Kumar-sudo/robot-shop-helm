@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongodb
+  namespace: {{ .Values.namespace }}
+spec: 
+  serviceName: mongodb
+  replicas: 2
+  selector:
+    matchLabels:  
+      app: mongodb
+  
+  template:
+    metadata:
+      labels:
+        app:  mongodb
+  
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+      terminationGracePeriodSeconds: 30
+
+      securityContext:
+        fsGroup: 999
+
+      containers:
+        - name: mongodb
+          image: "{{ .Values.mongodb.image.repository }}:{{ .Values.cart.image.tag}}"
+          imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
+
+          ports: 
+            - containerPort: {{ .Values.cart.service.port }}
+              name: mongo
+              
+          volumeMounts:
+            - name: data
+              mountPath:  /data/db
+
+          resources:
+            requests: 
+              cpu:  {{ .Values.mongodb.resources.requests.cpu | quote }}
+              memory: {{ .Values.mongodb.resources.requests.memory | quote }}
+
+            
+            limits:
+              cpu: {{ .Values.mongodb.resources.limits.cpu | quote }}
+              memory: {{ .Values.mongodb.resources.limits.memory | quote }}
+          
+          startupProbe:
+            exec:
+              command:
+                - mongosh
+                - --eval
+                - "db.adminCommand('ping')"
+            failureThreshold: 30
+            periodSeconds: 10
+            timeoutSeconds: 10
+            
+
+          readinessProbe:
+            exec: 
+              command:
+                - mongosh
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds: 10
+            failureThreshold: 30
+            periodSeconds:  10
+            timeoutSeconds: 10
+          
+          livenessProbe:
+            exec: 
+              command:
+                - mongosh
+                - --eval
+                - "db.adminCommand('ping')"
+            initialDelaySeconds:  60
+            periodSeconds:  20
+            timeoutSeconds: 10
+            failureThreshold: 5
+    
+  volumeClaimTemplates:
+    - metadata: 
+        name: data
+      
+      spec: 
+        accessModes: 
+          - ReadWriteOnce
+
+        storageClassName: {{ .Values.global.storageClass }}
+                
+        resources: 
+          requests:
+            storage: {{ .Values.mongodb.storage.size}}
+
+          
+
+          
+

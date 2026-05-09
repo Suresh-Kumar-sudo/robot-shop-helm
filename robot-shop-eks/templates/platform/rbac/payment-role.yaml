@@ -1,0 +1,12 @@
+# Role: lets payment pod read the gateway secret, nothing else
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: robot-shop-payment-secret-reader
+  namespace: robot-shop
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs:     ["get"]
+    resourceNames: ["payment-gateway-credentials"] 
+

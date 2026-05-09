@@ -1,0 +1,26 @@
+{{- if .Values.shipping.hpa.enabled }}
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: shipping-hpa
+  namespace: {{ .Values.namespace }} 
+
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1 
+    kind: Deployment
+    name: shipping 
+
+  minReplicas: {{ .Values.shipping.hpa.minReplicas }}
+  maxReplicas: {{ .Values.shipping.hpa.maxReplicas }}
+
+  metrics: 
+    - type: Resource
+      resource:
+        name: cpu 
+        target: 
+          type: Utilization
+          averageUtilization: {{ .Values.shipping.hpa.cpu }}
+
+{{- end }}

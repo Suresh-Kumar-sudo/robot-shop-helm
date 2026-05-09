@@ -1,0 +1,16 @@
+{{- if .Values.rabbitmq.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata: 
+  name: rabbitmq-pdb 
+  namespace: {{ .Values.namespace }}
+
+spec: 
+  maxUnavailable: {{ .Values.rabbitmq.pdb.maxUnavailable }}
+
+  selector: 
+    matchLabels: 
+      app.kubernetes.io/component: rabbitmq
+
+{{- end }}

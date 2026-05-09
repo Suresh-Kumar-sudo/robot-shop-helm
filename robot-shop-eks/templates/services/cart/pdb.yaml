@@ -1,0 +1,16 @@
+{{- if .Values.cart.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: cart-pdb 
+  namespace: {{ .Values.namespace }}
+
+spec: 
+  maxUnavailable: {{ .Values.cart.pdb.maxUnavailable }}
+
+  selector:
+    matchLabels:
+      app: cart
+
+{{- end }}

@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: StatefulSet
+
+metadata:
+  name: rabbitmq
+  namespace: {{ .Values.namespace }}
+
+  labels:
+    app.kubernetes.io/name: robot-shop
+    app.kubernetes.io/component: rabbitmq
+
+spec:
+  serviceName: rabbitmq
+
+  replicas: {{ .Values.rabbitmq.replicaCount }}
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: rabbitmq
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: robot-shop
+        app.kubernetes.io/component: rabbitmq
+
+    spec:
+      serviceAccountName: {{ .Values.serviceAccount.name }}
+
+      automountServiceAccountToken: false
+
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 999
+        fsGroup: 999
+
+        seccompProfile:
+          type: RuntimeDefault
+
+      containers:
+        - name: rabbitmq
+
+          image: "{{ .Values.rabbitmq.image.repository }}:{{ .Values.rabbitmq.image.tag }}"
+
+          imagePullPolicy: {{ .Values.rabbitmq.image.pullPolicy }}
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+
+            capabilities:
+              drop:
+                - ALL
+
+          ports:
+            - name: amqp
+              containerPort: 5672
+
+            - name: management
+              containerPort: 15672
+
+          env:
+            - name: RABBITMQ_ERLANG_COOKIE
+
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.rabbitmq.erlangCookie.secretName }}
+                  key: cookie
+
+            - name: RABBITMQ_MNESIA_BASE
+              value: /var/lib/rabbitmq/mnesia
+
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/rabbitmq
+
+          resources:
+            requests:
+              cpu: {{ .Values.rabbitmq.resources.requests.cpu | quote }}
+              memory: {{ .Values.rabbitmq.resources.requests.memory | quote }}
+
+            limits:
+              cpu: {{ .Values.rabbitmq.resources.limits.cpu | quote }}
+              memory: {{ .Values.rabbitmq.resources.limits.memory | quote }}
+
+          readinessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - check_port_connectivity
+
+            initialDelaySeconds: 30
+            timeoutSeconds: 15
+            periodSeconds: 10
+            failureThreshold: 6
+
+          livenessProbe:
+            exec:
+              command:
+                - rabbitmq-diagnostics
+                - status
+
+            initialDelaySeconds: 90
+            timeoutSeconds: 20
+            periodSeconds: 20
+            failureThreshold: 5
+
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+
+      spec:
+        accessModes:
+          - ReadWriteOnce
+
+        storageClassName: {{ .Values.global.storageClass }}
+
+        resources:
+          requests:
+            storage: {{ .Values.rabbitmq.storage.size }}

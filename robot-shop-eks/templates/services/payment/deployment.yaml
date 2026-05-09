@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata: 
+  name: payment
+  namespace: {{ .Values.namespace }}
+
+spec:
+  replicas: {{ .Values.payment.replicaCount }}
+  
+  selector: 
+    matchLabels: 
+      app.kubernetes.io/component: payment
+  
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: payment
+
+    spec:
+      serviceAccountName: {{ .Values.payment.serviceAccount.name }}
+      automountServiceAccountToken: false
+
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+
+      initContainers:
+        - name: wait-for-rabbitmq
+          image: busybox:1.36
+          command:
+            - sh
+            - -c 
+            - until nc -z rabbitmq 5672; do echo waiting for rabbitmq; sleep 2; done 
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          
+      containers:
+        - name: payment
+          image: "{{ .Values.payment.image.repository }}:{{ .Values.payment.image.tag }}"
+          imagePullPolicy: {{ .Values.payment.image.pullPolicy }}
+
+          ports:  
+            - containerPort: {{ .Values.payment.service.port }}
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop: ["ALL"]
+          
+          env:
+            - name: AMQP_HOST
+              value: {{ .Values.payment.rabbitmq.host | quote }}
+
+            - name: AMQP_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.payment.rabbitmq.credentialsSecretName }}
+                  key: password
+
+            - name: PAYMENT_GATEWAY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.payment.gateway.secretName }}
+                  key: api-key
+                  optional: true
+          
+
+          resources:
+            requests:
+              cpu: {{ .Values.payment.resources.requests.cpu | quote }}
+              memory: {{ .Values.payment.resources.requests.memory | quote }}
+            
+            limits: 
+              cpu: {{ .Values.payment.resources.limits.cpu | quote }}
+              memory: {{ .Values.payment.resources.limits.memory | quote }}
+
+          
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.payment.service.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 30
+          
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.payment.service.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+
+
+          

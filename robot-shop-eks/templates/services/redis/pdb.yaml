@@ -1,0 +1,17 @@
+{{- if .Values.redis.pdb.enabled }}
+
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: redis-pdb 
+  namespace: {{ .Values.namespace }}
+
+spec:
+  maxUnavailable: {{ .Values.redis.pdb.maxUnavailable }}
+
+  selector:
+    matchLabels: 
+      app.kubernetes.io/component: redis
+
+
+{{- end }} 
