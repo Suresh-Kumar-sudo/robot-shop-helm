@@ -147,7 +147,7 @@ cart:
   replicaCount: 1
   image:
     repository: sureshkumarnadar1/rs-cart
-    tag: "v1.2.0-c2ee5ef"
+    tag: "v1.2.0-787713b"
     pullpolicy: IfNotPresent
   service:
     port: 8080
