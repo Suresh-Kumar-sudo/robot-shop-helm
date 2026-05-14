@@ -346,7 +346,7 @@ user:
 
   image:
     repository: sureshkumarnadar1/rs-user
-    tag: "v1.2.0-8b8c224"
+    tag: "1.0"
     pullPolicy: IfNotPresent
 
   service:
