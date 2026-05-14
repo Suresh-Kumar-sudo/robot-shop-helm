@@ -35,7 +35,7 @@ spec:
 
       containers: 
         - name: mysql 
-          image: "{{ .Values.mysql.image.repository }}:{{ .Values.cart.image.tag}}"
+          image: "{{ .Values.mysql.image.repository }}:{{ .Values.mysql.image.tag}}"
           imagePullPolicy: {{ .Values.mysql.image.pullPolicy }}
           
           securityContext:
