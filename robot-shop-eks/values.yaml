@@ -193,7 +193,7 @@ payment:
   replicaCount: 1
   image:
     repository: sureshkumarnadar1/rs-payment
-    tag: "1.0"
+    tag: "v1.2.0-787713b"
     pullPolicy: IfNotPresent
   service:
     port: 8080
