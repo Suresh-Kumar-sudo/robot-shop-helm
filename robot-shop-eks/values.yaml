@@ -52,7 +52,7 @@ mongodb:
   replicaCount: 2
   image:
     repository: sureshkumarnadar1/rs-mongodb
-    tag: 1.0
+    tag: "1.0"
     pullPolicy: IfNotPresent
   storage:
     className: gp3
@@ -73,7 +73,7 @@ mysql:
   replicaCount: 1
   image:
     repository: sureshkumarnadar1/rs-mysql-db
-    tag: 1.0
+    tag: "1.0"
     pullPolicy: IfNotPresent
   storage:
     className: gp3
