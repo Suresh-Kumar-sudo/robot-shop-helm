@@ -24,7 +24,7 @@ spec:
 
       containers:
         - name: mongodb
-          image: "{{ .Values.mongodb.image.repository }}:{{ .Values.cart.image.tag}}"
+          image: "{{ .Values.mongodb.image.repository }}:{{ .Values.mongodb.image.tag}}"
           imagePullPolicy: {{ .Values.mongodb.image.pullPolicy }}
 
           ports: 
