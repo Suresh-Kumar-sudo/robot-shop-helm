@@ -1,454 +1,336 @@
 namespace: robot-shop
-
-
-
 ingressAlb:
   enabled: false
-
   className: alb
-
   scheme: internet-facing
-
 ingressLocal:
   enabled: true
-
   className: nginx
-
   host: robot-shop.local
-
   tls:
     enabled: true
-
     secretName: robot-shop-tls
-
     crt: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSURYakNDQWthZ0F3SUJBZ0lVWHMyT1k5aTJaNVdoMXFLVkhFYTRSUE5LOW5rd0RRWUpLb1pJaHZjTkFRRUwKQlFBd01ERVpNQmNHQTFVRUF3d1FjbTlpYjNRdGMyaHZjQzVzYjJOaGJERVRNQkVHQTFVRUNnd0tjbTlpYjNRdApjMmh2Y0RBZUZ3MHlOakExTURJd09UVXlORFZhRncweU56QTFNREl3T1RVeU5EVmFNREF4R1RBWEJnTlZCQU1NCkVISnZZbTkwTFhOb2IzQXViRzlqWVd3eEV6QVJCZ05WQkFvTUNuSnZZbTkwTFhOb2IzQXdnZ0VpTUEwR0NTcUcKU0liM0RRRUJBUVVBQTRJQkR3QXdnZ0VLQW9JQkFRQ2xoVnlqcHBTMFN0NHc1bnQzOFJMVWZpUlArRHROS2NCRgphbXBwZEYwTUoxNlJNcUhVd1RtM0RHcVRzWjdZV0RRUDljaDdPQnBuc21Rb0Rrbkx2bEdtU1ZQcjlQS1FVZVVqCmxTOUUvSTU4eXVGaHBjeDRuMyt5TXErMlVVck56aHlRQnRTNDJCa0V1UEw0TXBMM3FuczdCNE9jRHBRMjg1TTcKaGNnd2ZHRnJGTEtMMUhJcVNPSDlKbVhLdzlUZFNVYkZGWk03dk9BRWlDajQydzZkeENHMjFyelMrM0FBM0tpSQp0b0hqaDdVZEx3b2hDc295clRLVks0dk5IZ2JOWmhUUzZJS084TW00NitWdGpieDFXSjY2NFFJOUlSU3RiTldFClBpWlJIa1d3SWw0bVI4TzF2T2JDRm56V21XVTZGbzk4UTFNUmdpSHRRMHNGSnU5OWJab1JBZ01CQUFHamNEQnUKTUIwR0ExVWREZ1FXQkJRd2VJQzhndnJXQjBkRGxRS3ZpWUpTSHF1cm9EQWZCZ05WSFNNRUdEQVdnQlF3ZUlDOApndnJXQjBkRGxRS3ZpWUpTSHF1cm9EQVBCZ05WSFJNQkFmOEVCVEFEQVFIL01Cc0dBMVVkRVFRVU1CS0NFSEp2ClltOTBMWE5vYjNBdWJHOWpZV3d3RFFZSktvWklodmNOQVFFTEJRQURnZ0VCQUZzV1BwZE9qMFZnRUxBQWh5VnEKQWRYY2t1eXdUcC9RdDI0WjJ2UndaNDE1VVJVUVpXQk56VkQ3NXgxME5nbTg0RnM5cXBPR1pHNVl6aUZrWDhmdAp3Z2JJcmdMR0U5NzFtTS94dkt1V0cwelJiN1d2RzF6dmlQRlRYZ1VKbEEvTzZRQjc3bEhjR3N2UXpmTllxTHluCjFPU2I1VlNaajluSGh0eXRyYXVDMWZ0TDJCS2xGTE5qYzN6VXg3T2JPRnJDTnVJL3pueTJTY1I1NFF5YWNoVjAKc0RHTnlENUMvMng1NzVxakdCY2dZajR5d05oUTRmRkJHaUR5ZnlxaVpXdHBmYmRRNDVEazVYdU5Eb1BBd3cyaQpUem1QWmJFY1ErK2lrclRHWm9YbVRCbGR6NDQ0UjFSZGdyd0FuMmoxVUg2dVF4SnJXVURSNXZSTHRLbWc1clNCCnp2OD0KLS0tLS1FTkQgQ0VSVElGSUNBVEUtLS0tLQo="
     key: "LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV1d0lCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktVd2dnU2hBZ0VBQW9JQkFRQ2xoVnlqcHBTMFN0NHcKNW50MzhSTFVmaVJQK0R0TktjQkZhbXBwZEYwTUoxNlJNcUhVd1RtM0RHcVRzWjdZV0RRUDljaDdPQnBuc21RbwpEa25MdmxHbVNWUHI5UEtRVWVVamxTOUUvSTU4eXVGaHBjeDRuMyt5TXErMlVVck56aHlRQnRTNDJCa0V1UEw0Ck1wTDNxbnM3QjRPY0RwUTI4NU03aGNnd2ZHRnJGTEtMMUhJcVNPSDlKbVhLdzlUZFNVYkZGWk03dk9BRWlDajQKMnc2ZHhDRzIxcnpTKzNBQTNLaUl0b0hqaDdVZEx3b2hDc295clRLVks0dk5IZ2JOWmhUUzZJS084TW00NitWdApqYngxV0o2NjRRSTlJUlN0Yk5XRVBpWlJIa1d3SWw0bVI4TzF2T2JDRm56V21XVTZGbzk4UTFNUmdpSHRRMHNGCkp1OTliWm9SQWdNQkFBRUNnZjlBVGNQOVoyOStFTFdrbUp0RzI2c1BQRlNrbkFXY3JVb2xsS3R3cVlEWXRHZmkKTnJzQ0VETTZ1VGxTWHhtTk5ZSU53bkMvYXYwbE1sbWdLQnU1TENHdmd3QVlxNUVyVnVwSWJudEk0Mk5nWnNvMAphQ2JML0J0OGZ2STNZU1l2dEpHNU9Hc0k1bGlLRkNrbit2RnJGc2piS1hlU3krMEUra1ZZZHdJWmhnMGlYbVNVCjk4MktpNmROQkM1RkJoTFQ4OFdPamRlNFhMLzlOdGVaRzdrYVVJbVNORWFDTk10TUhZUS9NeFVKTWhtRG85ZGgKSlJ3bTVWR21mT01uR3gwcVN5blgyNmY4aFNyTGZBUXRJMnRMbWQ1UjRiL1BzalFCU1lac0swQ0pzSytjYVQ3Ngp3ZHlSWDlVTTdqaUpwRHlCMEU5RThXbXpwV1E2emhEUHlhM0x1aUVDZ1lFQTFEdEY5TzZ0QXhlQ3FZcXdpSEh1Ci95YTFOdVBpazM5TlBZMEFaRHBiSEpZU1NsUGhSZTQvcHV2MTA0THNxdjNVd1NLdmVGWW5qbzFqdzdjVG5qcHgKQVlYcisrYmhRWnF3eFg1ODdSa0JLRWlMNW9jdmJhSFV2SzRrbTlWcEQ5TVdaZmFWa2FkQXZNUE9sUmxtajFCaApoN0pLQnQydWwvNkw1aEVEcWtYTWFhRUNnWUVBeDZnQzJQcVk1c1J1VGkyQjZ1Z09HQTM2WVl2b2JFa05paWFtCjg0aW44akVSbjRBQU9zbHBvK1RuZXU1QzRrZ0xvcjFMMmhXclJ6VkpuUHA0UzJXMDhVeFRyYzNxSnBidjBwNGQKc24vUjFoV3U1Q0dndlBPNUd0dlN6UFVnQ2t5ZittWDRLRndZTnlLZUhHUlFYdllQVTF3QnNFZG5STlVnT1NxRgpvZnowdW5FQ2dZQWhPQTNoSXFLdUF6WU9kNGplTW9jb0pOVGtmSkx3WjFLZHViNC84ZXBrOVJCejFlRkM0dUhQCnJNdFRpZ0NsV3dtOEdVUEI0Q3BjNDhDajE3b1lZQ2xrQmFSRVQ0VWVrYW50bjdqS0c4blVsbFpmaFBWbGdaa2MKMTEwZmp5M2NyanVwUmdsdlBQQ2pHenJ3bDRNNEYyck1wSmwxcmFrd1hVVmtnM0ZCYTU5dFFRS0JnUUN0K2tXZwo5WjNQV1ZRVlk2cFdIQ2hMNWNKTXhqR2VTbm8xN0VDRzdvb0tqWitoc1ZTQjVZamNmRmNKMUIwTU9XT0tTQkdVCjFGVVFFK3Mxa3p6SDFyUzVuNTA3VXJlN01NT0NjSzNJSVlHa1gvaXFhbk02czlhVkJRRElBTUlPdDM2Z0g4TUMKeUYyQmpmVGhJTGk0UndwTHhWempVeFUxOGRIR2ZyczcwTVVnd1FLQmdFdHkwNTZ4S2QvSjZuODdzODJGZkQxMwo2cGVka3pJQzJiU3JKOEVKREE3TjNjR01OYUtDREFHNFROUTB6VWZESWd1aUlYbFZpYWt5dDhpR2s5eFQ5M0FZCjF5cHg3OXBmWDJEUUhyeWdKQ0t5aGY5ZW50bjNCUjlYZWFkQmxBUkVaeEFvT05iVHJLTDhmNGJSckNFWmFpNmkKbmZrVzJRZnR1NEFLVFhtUmdUVFAKLS0tLS1FTkQgUFJJVkFURSBLRVktLS0tLQo="
-
 global:
   storageClass: standard
-
 resourceQuota:
   enabled: true
-
   requestsCpu: "3200m"
   limitsCpu: "7000m"
-
   requestsMemory: "5000Mi"
   limitsMemory: "8000Mi"
-
   pods: "40"
   services: "20"
   secrets: "20"
   configmaps: "20"
   persistentVolumeClaims: "5"
-
   requestsStorage: "20Gi"
-
 limitRange:
-  enabled: true 
-
-  container: 
-
+  enabled: true
+  container:
     defaults:
       cpu: "200m"
       memory: "128Mi"
-
     defaultRequest:
       cpu: "100m"
       memory: "64Mi"
-
-    max: 
+    max:
       cpu: "1000m"
       memory: "1500Mi"
-
     min:
       cpu: "100m"
       memory: "32Mi"
-
-  pvc: 
-
-      maxStorage: "10Gi"
-      minStorage: "100Mi"
-
+  pvc:
+    maxStorage: "10Gi"
+    minStorage: "100Mi"
 serviceAccount:
   create: true
-
   name: robot-shop
-
   imagePullSecret: registry-credentials
-
 mongodb:
-  replicaCount: 2 
-
-  image: 
+  replicaCount: 2
+  image:
     repository: sureshkumarnadar1/rs-mongodb
     tag: 1.0
     pullPolicy: IfNotPresent
-
-  storage: 
+  storage:
     className: gp3
     size: 5Gi
-
   resources:
-    requests: 
+    requests:
       cpu: "250m"
       memory: "512Mi"
-
     limits:
       cpu: "500m"
       memory: "1Gi"
-  
   service:
     port: 27017
-
   pdb:
     enabled: true
-    minAvailable: 1 
-
+    minAvailable: 1
 mysql:
-  replicaCount: 1 
-
-  image: 
+  replicaCount: 1
+  image:
     repository: sureshkumarnadar1/rs-mysql-db
     tag: 1.0
     pullPolicy: IfNotPresent
-
-  storage: 
+  storage:
     className: gp3
     size: 5Gi
-
   resources:
-    requests: 
+    requests:
       cpu: "250m"
       memory: "512Mi"
-
     limits:
       cpu: "500m"
       memory: "1Gi"
-  
   service:
     port: 3306
-
   pdb:
     enabled: true
-    maxUnavailable: 1 
-
+    maxUnavailable: 1
 redis:
-  replicaCount: 1 
-
-  image: 
+  replicaCount: 1
+  image:
     repository: redis
     tag: "4.0.6"
     pullPolicy: IfNotPresent
-
-  storage: 
+  storage:
     className: gp3
     size: 5Gi
-
   resources:
-    requests: 
+    requests:
       cpu: "200m"
       memory: "128Mi"
-
     limits:
       cpu: "200m"
       memory: "128Mi"
-  
   service:
     port: 6379
-
   pdb:
     enabled: true
-    maxUnavailable: 1 
-  
+    maxUnavailable: 1
 rabbitmq:
   replicaCount: 1
-
   image:
     repository: rabbitmq
     tag: "3.12-management"
     pullPolicy: IfNotPresent
-
   storage:
     className: gp3
     size: 2Gi
-
   resources:
     requests:
       cpu: "200m"
       memory: "512Mi"
-
     limits:
       cpu: "500m"
       memory: "1Gi"
-  
   service:
     amqpPort: 5672
     managementPort: 15672
-  
   clientService:
     type: ClusterIP
     port: 5672
-  
   pdb:
     enabled: true
     maxUnavailable: 1
-  
   auth:
     secretName: rabbitmq-credentials
     username: guest
     password: guest
-  
   erlangCookie:
     secretName: rabbitmq-erlang-cookie
     cookie: secretrabbitmqcookiesuresh
-  
-cart: 
+cart:
   replicaCount: 1
-
-  image:  
-    repository: sureshkumarnadar1/rs-cart
-    tag: "1.0"
-    pullpolicy: IfNotPresent 
-
-  service:
-    port: 8080
-
-  resources:
-    requests:
-      cpu: "100m"
-      memory: "50Mi"
-    
-    limits:
-      cpu: "200m"
-      memory: "100Mi"
-
-  hpa:
-    enabled: true 
-    minReplicas: 1
-    maxReplicas: 5 
-    cpu: 70 
-  
-  pdb:
-    enabled: true
-    maxUnavailable: 1 
-
-catalogue:
-  replicaCount: 1
-
   image:
-    repository: sureshkumarnadar1/rs-catalogue
-    tag: "1.0"
-    pullPolicy: IfNotPresent
-
+    repository: sureshkumarnadar1/rs-cart
+    tag: "v1.2.0-8b8c224"
+    pullpolicy: IfNotPresent
   service:
     port: 8080
-
   resources:
     requests:
       cpu: "100m"
       memory: "50Mi"
-
     limits:
       cpu: "200m"
       memory: "100Mi"
-
   hpa:
     enabled: true
     minReplicas: 1
     maxReplicas: 5
     cpu: 70
-
   pdb:
     enabled: true
     maxUnavailable: 1
-
+catalogue:
+  replicaCount: 1
+  image:
+    repository: sureshkumarnadar1/rs-catalogue
+    tag: "1.0"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8080
+  resources:
+    requests:
+      cpu: "100m"
+      memory: "50Mi"
+    limits:
+      cpu: "200m"
+      memory: "100Mi"
+  hpa:
+    enabled: true
+    minReplicas: 1
+    maxReplicas: 5
+    cpu: 70
+  pdb:
+    enabled: true
+    maxUnavailable: 1
 payment:
   replicaCount: 1
-
   image:
     repository: sureshkumarnadar1/rs-payment
     tag: "1.0"
     pullPolicy: IfNotPresent
-
   service:
     port: 8080
-
   serviceAccount:
     create: true
     name: robot-shop-payment
     imagePullSecret: registry-credentials
-
   rabbitmq:
     host: rabbitmq
     credentialsSecretName: rabbitmq-credentials
-
   gateway:
     secretName: payment-gateway-credentials
     apiKey: "https://paypal.com/"
-
   resources:
     requests:
       cpu: "100m"
       memory: "64Mi"
-
     limits:
       cpu: "200m"
       memory: "128Mi"
-
   hpa:
     enabled: true
     minReplicas: 1
     maxReplicas: 2
     cpu: 70
-
   pdb:
     enabled: true
     maxUnavailable: 1
-  
 shipping:
   replicaCount: 1
-
   image:
     repository: sureshkumarnadar1/rs-shipping
     tag: "1.0"
     pullPolicy: IfNotPresent
-
   service:
     port: 8080
-
   env:
     cartEndpoint: cart:8080
     dbHost: mysql
     javaOpts: "-Xmn256m -Xmx768m"
-
   resources:
     requests:
       cpu: "100m"
       memory: "500Mi"
-
     limits:
       cpu: "200m"
       memory: "1Gi"
-
   hpa:
     enabled: true
     minReplicas: 1
     maxReplicas: 7
     cpu: 70
-
   pdb:
     enabled: true
     maxUnavailable: 1
-
 user:
   replicaCount: 1
-
   image:
     repository: sureshkumarnadar1/rs-user
     tag: "1.0"
     pullPolicy: IfNotPresent
-
   service:
     port: 8080
-
   resources:
     requests:
       cpu: "100m"
       memory: "50Mi"
-
     limits:
       cpu: "200m"
       memory: "100Mi"
-
   hpa:
     enabled: true
     minReplicas: 1
     maxReplicas: 5
     cpu: 70
-
   pdb:
     enabled: true
     maxUnavailable: 1
-
 ratings:
   replicaCount: 1
-
   image:
     repository: sureshkumarnadar1/rs-ratings
     tag: "1.0"
     pullPolicy: IfNotPresent
-
   service:
     port: 80
-
   resources:
     requests:
       cpu: "100m"
       memory: "50Mi"
-
     limits:
       cpu: "200m"
       memory: "100Mi"
-
   hpa:
     enabled: true
     minReplicas: 1
     maxReplicas: 2
     cpu: 70
-
   pdb:
     enabled: true
     maxUnavailable: 1
-
 dispatch:
   replicaCount: 1
-
   image:
     repository: sureshkumarnadar1/rs-dispatch
     tag: "1.0"
     pullPolicy: IfNotPresent
-
   resources:
     requests:
       cpu: "100m"
       memory: "100Mi"
-
     limits:
       cpu: "200m"
       memory: "100Mi"
-
   keda:
     enabled: true
-
     minReplicas: 1
     maxReplicas: 10
-
     pollingInterval: 5
     cooldownPeriod: 30
-
     rabbitmq:
       host: amqp://guest:guest@rabbitmq-client.robot-shop.svc.cluster.local:5672/
       queueName: orders
       queueLength: "20"
-
   pdb:
     enabled: true
     maxUnavailable: 1
-
 web:
   replicaCount: 1
-
   image:
     repository: sureshkumarnadar1/rs-web
     tag: "1.0"
     pullPolicy: IfNotPresent
-
   service:
     type: ClusterIP
     port: 80
     targetPort: 8080
-
   env:
     catalogueHost: catalogue
     userHost: user
@@ -456,22 +338,18 @@ web:
     shippingHost: shipping
     paymentHost: payment
     ratingsHost: ratings
-
   resources:
     requests:
       cpu: "100m"
       memory: "64Mi"
-
     limits:
       cpu: "200m"
       memory: "128Mi"
-
   hpa:
     enabled: true
     minReplicas: 1
     maxReplicas: 4
     cpu: 70
-
   pdb:
     enabled: true
     maxUnavailable: 1
