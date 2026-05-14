@@ -208,7 +208,7 @@ cart:
 
   image:  
     repository: sureshkumarnadar1/rs-cart
-    tag: "1.0"
+    tag: "v1.2.0-8b8c224"
     pullpolicy: IfNotPresent 
 
   service:
@@ -346,7 +346,7 @@ user:
 
   image:
     repository: sureshkumarnadar1/rs-user
-    tag: "1.0"
+    tag: "v1.2.0-8b8c224"
     pullPolicy: IfNotPresent
 
   service:
