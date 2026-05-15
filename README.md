@@ -462,7 +462,6 @@ kubectl rollout restart deployment/<DEPLOYMENT_NAME>
 kubectl delete pod <POD_NAME> -n <NAMESPACE>
 ```
 
-
 ---
 
 ## Future Enhancements
@@ -472,3 +471,4 @@ kubectl delete pod <POD_NAME> -n <NAMESPACE>
 | Kubernetes Network Policies | Restrict pod-to-pod communication — enforce least-privilege networking across namespaces and services |
 | Monitoring & Observability | Integrate Prometheus + Grafana for metrics, Loki for log aggregation, and distributed tracing (Tempo / Jaeger) |
 | Karpenter / EKS Auto Mode | Replace managed node groups with Karpenter for intelligent, cost-optimised node provisioning on EKS |
+| Blue/Green Deployment | Zero-downtime releases by running parallel environments — shift traffic via ArgoCD Rollouts or ALB weighted target groups |
