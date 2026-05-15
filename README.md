@@ -4,9 +4,13 @@ Helm-based deployment for Robot Shop supporting both local development (Minikube
 
 ---
 
-### Project Demo
+## Project Demo
 
-<video src="https://raw.githubusercontent.com/Suresh-Kumar-sudo/robot-shop-helm/tree/main/assets/preview.webm" width="100%" controls autoplay muted loop></video>
+```
+VIDEO PATH : ./assets/preview/webm
+```
+
+
 
 
 ## Repository
